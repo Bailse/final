@@ -1,0 +1,195 @@
+/* ========================================================================
+    CUSTOM CSS SECTION
+    ========================================================================
+    ส่วนนี้คือ CSS ที่เขียนขึ้นมาเองทั้งหมดเพื่อทดแทน Tailwind CSS
+    เรากำหนดสไตล์สำหรับ element ต่างๆ เช่น body, container, buttons, cards ฯลฯ
+*/
+:root {
+    --primary-color: #3b82f6; /* สีน้ำเงิน */
+    --primary-hover: #2563eb;
+    --secondary-color: #1f2937; /* สีเทาเข้ม */
+    --background-color: #1a1a2e; /* สีพื้นหลังเว็บเป็นสีน้ำเงินเข้ม */
+    --text-color: #e0e0e0;
+    --text-muted-color: #9ca3af;
+    --card-background: rgba(23, 23, 43, 0.7);
+    --border-color: #4b5563;
+    --success-color: #22c55e;
+    --success-hover: #16a34a;
+    --danger-color: #ef4444;
+    --danger-hover: #dc2626;
+    --purple-color: #8b5cf6;
+    --purple-hover: #7c3aed;
+    --indigo-color: #6366f1;
+    --indigo-hover: #4f46e5;
+}
+
+/* Base Styles */
+body {
+    font-family: 'Kanit', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Layout */
+.container {
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+}
+
+/* View Management */
+.view {
+    display: none; /* ซ่อน view ทั้งหมดไว้เป็นค่าเริ่มต้น */
+}
+.view.active {
+    display: block; /* แสดงเฉพาะ view ที่มี class 'active' */
+}
+
+/* Typography */
+h1 { font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; color: #ffffff; }
+h2 { font-size: 1.875rem; font-weight: 700; text-align: center; margin-bottom: 1.5rem; color: #ffffff; }
+p { line-height: 1.6; }
+.text-center { text-align: center; }
+.text-muted { color: var(--text-muted-color); }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mt-6 { margin-top: 1.5rem; }
+
+/* Card Component */
+.card {
+    background-color: var(--card-background);
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    width: 100%;
+    font-weight: 700;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.btn:active {
+     transform: scale(0.98);
+}
+.btn-primary { background-color: var(--primary-color); color: white; }
+.btn-primary:hover { background-color: var(--primary-hover); }
+.btn-success { background-color: var(--success-color); color: white; }
+.btn-success:hover { background-color: var(--success-hover); }
+.btn-purple { background-color: var(--purple-color); color: white; }
+.btn-purple:hover { background-color: var(--purple-hover); }
+.btn-indigo { background-color: var(--indigo-color); color: white; }
+.btn-indigo:hover { background-color: var(--indigo-hover); }
+.btn-answer { background-color: var(--secondary-color); color: white; text-align: left; margin-bottom: 0.75rem; }
+.btn-answer:hover { background-color: var(--primary-color); }
+.btn-link { background: none; box-shadow: none; color: var(--text-muted-color); }
+.btn-link:hover { color: white; }
+
+/* Forms */
+.form-group { margin-bottom: 1.5rem; }
+.form-label { display: block; margin-bottom: 0.5rem; font-size: 0.875rem; font-weight: 500; color: var(--text-muted-color); }
+.form-control {
+    background-color: #374151;
+    border: 1px solid var(--border-color);
+    color: white;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    width: 100%;
+    padding: 0.75rem;
+    box-sizing: border-box;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+.input-group { display: flex; gap: 0.5rem; }
+.input-group .form-control { flex-grow: 1; }
+.input-group .btn { width: auto; flex-shrink: 0; }
+
+/* Category Grid */
+.category-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+@media (min-width: 768px) {
+    .category-grid { grid-template-columns: 1fr 1fr; }
+}
+.category-grid .btn { padding: 1.5rem 1rem; font-size: 1.25rem; background-color: var(--secondary-color); }
+.category-grid .btn:hover { background-color: var(--primary-color); }
+
+/* Creator View specific styles */
+.creator-question-item {
+    background-color: #374151;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+.creator-question-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.creator-question-item-header p { margin: 0; font-weight: 600; }
+.delete-btn {
+    background: none; border: none; color: var(--danger-color); font-size: 1.5rem; font-weight: 700; cursor: pointer;
+}
+.delete-btn:hover { color: var(--danger-hover); }
+.creator-question-item ul { list-style: disc; list-style-position: inside; margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-muted-color); padding-left: 0.5rem; }
+.creator-preview-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    margin-left: 1rem;
+    background-color: var(--secondary-color);
+}
+
+
+/* Image Styles */
+#result-image {
+    width: 100%;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+
+/* Loading Spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 50;
+}
+.spinner {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 4px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    animation: spin 1s linear infinite;
+}

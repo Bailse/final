@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คุณคือใครในโลกแฟนตาซี?</title>
+    <!-- นำเข้า Google Fonts เพื่อความสวยงาม -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- เชื่อมต่อกับไฟล์ CSS ภายนอก -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app" class="container">
+        
+        <!-- VIEW 1: หน้าเลือกหมวดหมู่ (Category Selection) -->
+        <div id="category-selection-view" class="view active">
+            <h1>คุณคือตัวอะไร?</h1>
+            <p class="text-center text-muted mb-8">เลือกหมวดหมู่เพื่อค้นหาตัวตนของคุณ</p>
+            <div id="category-list" class="category-grid">
+                <!-- รายการหมวดหมู่จะถูกสร้างโดย JavaScript ที่นี่ -->
+            </div>
+            <div class="mt-6">
+                <button onclick="showCreatorView()" class="btn btn-success">
+                    + สร้างหมวดหมู่ของคุณเอง
+                </button>
+            </div>
+        </div>
+
+        <!-- VIEW 2: หน้าทำแบบทดสอบ (Quiz View) -->
+        <div id="quiz-view" class="view">
+            <h2 id="quiz-category-title"></h2>
+            <div class="card">
+                <p id="question-text" class="mb-6" style="font-size: 1.25rem;"></p>
+                <div id="answers-container">
+                    <!-- คำตอบจะถูกสร้างโดย JavaScript ที่นี่ -->
+                </div>
+            </div>
+            <div class="mt-6 text-center" style="display: flex; justify-content: space-between; align-items: center;">
+                 <button id="prev-question-btn" onclick="previousQuestion()" class="btn btn-link">ย้อนกลับข้อที่แล้ว</button>
+                 <button onclick="goHome()" class="btn btn-link">กลับไปหน้าเลือกหมวดหมู่</button>
+            </div>
+        </div>
+
+        <!-- VIEW 3: หน้าแสดงผลลัพธ์ (Result View) -->
+        <div id="result-view" class="view text-center">
+            <div class="card">
+                <img id="result-image" src="" alt="Result Image" style="display: none;">
+                <p class="text-lg mb-2 text-muted">ผลลัพธ์ของคุณคือ...</p>
+                <h2 id="result-title" class="mb-4" style="text-align:center;"></h2>
+                <p id="result-description" class="text-muted mb-8"></p>
+                <button onclick="goHome()" class="btn btn-primary" style="width: auto; padding: 0.75rem 1.5rem;">
+                    เล่นอีกครั้ง
+                </button>
+            </div>
+        </div>
+        
+        <!-- VIEW 4: หน้าสร้างหมวดหมู่ (Creator View) -->
+        <div id="creator-view" class="view">
+            <h2>สร้างแบบทดสอบของคุณ</h2>
+            
+            <div class="card">
+                <!-- ส่วนที่ 1: สร้างชื่อหมวดหมู่ -->
+                <div class="form-group">
+                    <label for="category-name-input" class="form-label">1. ชื่อหมวดหมู่ (Category)</label>
+                    <div class="input-group">
+                        <input type="text" id="category-name-input" class="form-control" placeholder="เช่น สัตว์น้ำ, ตัวละครในเกม">
+                        <button onclick="generateWithLLM('category')" class="btn btn-purple">
+                            ✨ Gen
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ส่วนที่ 2: เพิ่มคำถามด้วยตัวเอง -->
+                <div class="form-group">
+                    <label class="form-label">2. เพิ่มคำถามด้วยตัวเอง</label>
+                    <div id="manual-question-form">
+                        <input type="text" id="manual-question-text" class="form-control" placeholder="พิมพ์คำถามที่นี่..." style="margin-bottom: 0.75rem;">
+                        <div class="category-grid" style="gap: 0.5rem;">
+                            <input type="text" class="form-control manual-answer-text" placeholder="คำตอบ 1 (คะแนน 1)">
+                            <input type="text" class="form-control manual-answer-text" placeholder="คำตอบ 2 (คะแนน 2)">
+                            <input type="text" class="form-control manual-answer-text" placeholder="คำตอบ 3 (คะแนน 3)">
+                            <input type="text" class="form-control manual-answer-text" placeholder="คำตอบ 4 (คะแนน 4)">
+                        </div>
+                        <button onclick="addManualQuestion()" class="btn btn-primary" style="margin-top: 1rem;">+ เพิ่มคำถามนี้</button>
+                    </div>
+                </div>
+
+                <!-- ส่วนที่ 3: รายการคำถาม และ Gen เพิ่ม -->
+                <div class="form-group">
+                    <label class="form-label">3. รายการคำถาม (Questions List)</label>
+                    <div id="question-creator-list" class="mb-4"></div>
+                    <button onclick="generateWithLLM('questions')" class="btn btn-indigo">
+                        ✨ Gen คำถามเพิ่ม (AI)
+                    </button>
+                </div>
+                
+                 <!-- ส่วนที่ 4: สร้างผลลัพธ์ -->
+                <div class="form-group">
+                    <label class="form-label">4. ผลลัพธ์ (Results)</label>
+                    
+                    <div id="manual-result-form" class="creator-question-item" style="background-color: #1f2937; margin-bottom: 1rem;">
+                        <input type="text" id="manual-result-title" class="form-control" placeholder="ชื่อผลลัพธ์ (เช่น ยูนิคอร์น)" style="margin-bottom: 0.5rem;">
+                        <input type="text" id="manual-result-desc" class="form-control" placeholder="คำอธิบายผลลัพธ์" style="margin-bottom: 0.5rem;">
+                        <input type="number" id="manual-result-score" class="form-control" placeholder="แสดงผลเมื่อคะแนนน้อยกว่าหรือเท่ากับ..." style="margin-bottom: 0.5rem;">
+                        <input type="text" id="manual-result-image" class="form-control" placeholder="URL รูปภาพ (เช่น https://...)" style="margin-bottom: 0.75rem;">
+                        <button onclick="addManualResult()" class="btn btn-primary" style="width: 100%;">+ เพิ่มผลลัพธ์นี้</button>
+                    </div>
+
+                     <div id="result-creator-list" class="mb-4"></div>
+                    <button onclick="generateWithLLM('results')" class="btn btn-indigo">
+                        ✨ Gen ผลลัพธ์เพิ่ม (AI)
+                    </button>
+                </div>
+
+                <!-- ส่วนที่ 5: บันทึกและกลับ -->
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                    <button onclick="goHome()" class="btn btn-link">ยกเลิก</button>
+                    <button onclick="postCustomQuiz()" class="btn btn-success" style="width: auto; padding: 0.75rem 1.5rem;">
+                        ✅ Post แบบทดสอบ
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Overlay: แสดงตอนที่กำลังรอ LLM ทำงาน -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div style="text-align:center;">
+                <div class="spinner"></div>
+                <p style="color: white; margin-top: 1rem; font-size: 1.125rem;">กำลังใช้เวทมนตร์สร้างสรรค์...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- เชื่อมต่อกับไฟล์ JavaScript ภายนอก -->
+    <script src="script.js"></script>
+
+</body>
+</html>
+
